@@ -37,7 +37,7 @@ activemq.broker-url: tcp://localhost:61616
 spring.activemq.packages.trust-all=true
 ```
 Для консьюмера при подключении к ActiveMQ, ActiveMQConnectionFactory создается и передается в конструкторе DefaultJmsListenerContainerFactory. Для конфигурации консьюмера создан класс 
-[ReceiverConfig](https://github.com/vellarLa/ESA_LAB__4/blob/master/src/main/java/com/example/demo/config/ReceiverConfig.java)
+[ReceiverConfig](https://github.com/sumrako/ESA_LAB_4/blob/master/src/main/java/com/example/demo/config/ReceiverConfig.java)
 
 ### Message Producer
 Для отправки сообщений использовался JmsTemplate, который требует ссылки на ConnectionFactory. Для отправки вызывается метод convertAndSend(), который отправляет данный объект по ***logger.q*** назначению, преобразуя объект в сообщение JMS. 
@@ -59,7 +59,7 @@ public class Sender {
 ### Message Consumer
 **@JmsListener** Аннотация создает контейнер прослушивателя сообщений, используя **JmsListenerContainerFactory**. 
 
-В методе получения сообщения реализована логика механизма логирования и мониторинга изменений. Переданное сообщение типа Log сохраняется в базу данных. Затем, анализируется наличие типа изменения с теми, которые указаны к таблице **events_to_subscribe**. Если о данном типе изменений необхдимо оповещать по электронной почте, то для всех подписчиков из **subscriptions** реализуется отправка сообщения на электронную почту. Формирование текста сообщения происходит в классе [LetterDto](https://github.com/vellarLa/ESA_LAB__4/blob/master/src/main/java/com/example/demo/dto/LetterDto.java) в методе ***toString()***:
+В методе получения сообщения реализована логика механизма логирования и мониторинга изменений. Переданное сообщение типа Log сохраняется в базу данных. Затем, анализируется наличие типа изменения с теми, которые указаны к таблице **events_to_subscribe**. Если о данном типе изменений необхдимо оповещать по электронной почте, то для всех подписчиков из **subscriptions** реализуется отправка сообщения на электронную почту. Формирование текста сообщения происходит в классе [LetterDto](https://github.com/sumrako/ESA_LAB_4/blob/master/src/main/java/com/example/demo/dto/LetterDto.java) в методе ***toString()***:
 
 Код реализации:
 
@@ -116,8 +116,9 @@ public class SendEmailServiceImpl implements SendEmailService {
 
 ## Демонстрация работоспособности
 
-### Таблица логирования:
-
 ### Письма на электронную почту для разных типов изменения
+![image](https://github.com/sumrako/ESA_LR_4/assets/67976572/fd73ce41-0970-49e7-a175-cde20ff64dd1)
+![image](https://github.com/sumrako/ESA_LR_4/assets/67976572/e5aa7cab-7b20-41ef-b2c1-aca21300561c)
+![image](https://github.com/sumrako/ESA_LR_4/assets/67976572/8897a7ec-ca51-4b78-b212-cd226fc2e10c)
 
 
