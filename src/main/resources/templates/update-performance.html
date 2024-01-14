@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update performance</title>
+</head>
+<body>
+<h2 style="color: olive; font-family: Georgia,serif">Update performance</h2>
+<form th:method="put" th:object="${performance}" th:action="@{/performance/{id}(id=${performance.id})}">
+  <label style="color: olive; font-family: Candara,sans-serif">
+    Name
+    <input style="font-family: Candara,sans-serif" th:field="*{name}" required>
+  </label>
+  <br/>
+  <label style="color: olive; font-family: Candara,sans-serif">
+    Genre
+    <select style="font-family: Candara,sans-serif" th:field="*{genre}" required>
+      <option style="font-family: Candara,sans-serif" th:value="comedy" th:text="comedy"></option>
+      <option style="font-family: Candara,sans-serif" th:value="horror" th:text="horror"></option>
+      <option style="font-family: Candara,sans-serif" th:value="drama" th:text="drama"></option>
+    </select>>
+  </label>
+  <br/>
+  <label style="color: olive; font-family: Candara,sans-serif">
+    Country
+    <input style="font-family: Candara,sans-serif" th:field="*{country}">
+  </label>
+  <br/>
+  <button type="submit">Save</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timetable</title>
+</head>
+<body>
+<h1 style="color: darkmagenta; font-family: Georgia,serif">Timetable</h1>
+<div style="background: aquamarine; width: 400px; height: 200px; padding-left: 150px">
+    <h2 style="color: darkblue; font-family: Georgia,serif">Create new seance</h2>
+    <form style="margin-top: 20px; line-height: 30px" th:method="post" th:object="${timetable}" th:action="@{/timetable}">
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Performance
+            <select style="font-family: Candara,sans-serif" th:field="*{performance.id}" required>
+                <option style="font-family: Candara,sans-serif" th:each="f: ${performances}" th:value="${f.id}" th:text="${f.name}"></option>
+            </select>
+        </label>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Hall
+            <select style="font-family: Candara,sans-serif" th:field="*{hall}" required>
+                <option style="font-family: Candara,sans-serif" th:value=1 th:text="1"></option>
+                <option style="font-family: Candara,sans-serif" th:value=2 th:text="2"></option>
+                <option style="font-family: Candara,sans-serif" th:value=3 th:text="3"></option>
+            </select>>
+        </label>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Datetime
+            <input style="font-family: 'Times New Roman',sans-serif" type="datetime-local" value="2024-01-01T00:00:00" th:field="*{date}" required>
+        </label>
+        <br/>
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+<table style="margin: 50px">
+    <thead>
+    <tr>
+        <td style="color: darkmagenta" width="300px">Performance</td>
+        <td style="color: darkmagenta" width="300px">Hall</td>
+        <td style="color: darkmagenta" width="300px">Datetime</td>
+        <td></td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t: ${fullTimetable}">
+        <td bgcolor=#fffff0 th:utext="${t.performance.name}"></td>
+        <td bgcolor=#fffff0 th:text="${t.hall}"></td>
+        <td bgcolor=#fffff0 th:text="${t.date}"></td>
+        <td>
+            <form th:action="@{/timetable/{id}(id=${t.id})}" th:method="get">
+                <button type="submit"> update </button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/timetable/{id}(id=${t.id})}" th:method="delete">
+                <button type="submit"> delete </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tickets</title>
+</head>
+<body>
+<h1 style="color: darkmagenta; font-family: Georgia,serif">Tickets</h1>
+<div style="background: aquamarine; width: 400px; height: 200px; padding-left: 150px">
+    <h2 style="color: darkblue; font-family: Georgia,serif">Buy new ticket</h2>
+    <form id="performance-form" th:method="post" th:object="${performance}" th:action="@{/ticket/performance}"></form>
+    <form id="timetable-form" th:method="post" th:object="${changeTicket}" th:action="@{/ticket/timetable}"></form>
+    <input id="btnPerformance" hidden th:type="submit" form="performance-form"/>
+    <input id="btnTimetable" hidden th:type="submit" form="timetable-form"/>
+
+    <form style="margin-top: 20px; line-height: 30px" th:method="post" th:object="${ticket}" th:action="@{/ticket}">
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Performance
+            <select style="font-family: Candara,sans-serif" th:field="${performance.id}" th:onchange="document.getElementById('btnPerformance').click()" form="performance-form" required>
+                <option style="font-family: Candara,sans-serif" th:each="f: ${performances}" th:value="${f.id}" th:text="${f.name}"></option>
+            </select>
+        </label>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Seance
+            <select style="font-family: 'Times New Roman',sans-serif" th:field="${changeTicket.timetable.id}" required th:onchange="document.getElementById('btnTimetable').click()" form="timetable-form">
+                <option style="font-family: 'Times New Roman',sans-serif" th:each="m: ${fullTimetable}" th:value="${m.id}" th:text="${m.date}"></option>
+            </select>>
+        </label>
+        <input style="font-family: Candara,sans-serif" th:field="*{timetable.id}" hidden>
+        <input style="font-family: Candara,sans-serif" th:field="*{timetable.performance.id}" hidden>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Seats
+            <select style="font-family: Candara,sans-serif" th:field="${changeTicket.seatDto}" th:onchange="document.getElementById('btnTimetable').click()" form="timetable-form" required>
+                <option style="font-family: Candara,sans-serif" th:each="m: ${seats}" th:value="|${m.seat};${m.row}|" th:text="|Row: ${m.row} Seat: ${m.seat}|"></option>
+            </select>>
+        </label>
+        <input style="font-family: Candara,sans-serif" th:field="*{seatDto.row}" hidden>
+        <input style="font-family: Candara,sans-serif" th:field="*{seatDto.seat}" hidden>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Any benefits
+            <input style="font-family: Candara,sans-serif" type="checkbox" th:field="*{benefits}">
+        </label>
+        <br/>
+        <button type="submit">Save</button>
+
+    </form>
+</div>
+
+<table style="margin: 50px">
+    <thead>
+    <tr>
+        <td style="color: darkmagenta" width="200px">Performance</td>
+        <td style="color: darkmagenta" width="200px">Seat</td>
+        <td style="color: darkmagenta" width="200px">Row</td>
+        <td style="color: darkmagenta" width="200px">Cost</td>
+        <td style="color: darkmagenta" width="200px">Datetime</td>
+        <td></td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t: ${tickets}">
+        <td bgcolor=#fffff0 th:utext="${t.timetable.performance.name}"></td>
+        <td bgcolor=#fffff0 th:text="${t.seatDto.seat}"></td>
+        <td bgcolor=#fffff0 th:text="${t.seatDto.row}"></td>
+        <td bgcolor=#fffff0 th:text="${t.cost}"></td>
+        <td bgcolor=#fffff0 th:text="${t.timetable.date}"></td>
+
+        <td>
+            <form th:action="@{/ticket/{id}(id=${t.id})}" th:method="get">
+                <button type="submit"> update </button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/ticket/{id}(id=${t.id})}" th:method="delete">
+                <button type="submit"> delete </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

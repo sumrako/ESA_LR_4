@@ -1,0 +1,69 @@
+package com.example.demo.controller.rest;
+
+import com.example.demo.dto.PerformanceDto;
+import com.example.demo.service.PerformanceService;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.*;
+
+@RestController
+@RequestMapping(value = "/rest/performances")
+@RequiredArgsConstructor
+public class PerformanceRestController {
+    private final PerformanceService performanceService;
+    private final XmlMapper xmlMapper = new XmlMapper();
+
+    @GetMapping(path = "", produces = {MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> findAllXml() throws TransformerException, IOException {
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        xmlMapper.registerModule(javaTimeModule);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer(new StreamSource("src/main/resources/static/performance.xslt"));
+        Source xmlSource = new StreamSource(new ByteArrayInputStream(xmlMapper.writeValueAsBytes(performanceService.findAll())));
+        StringWriter out = new StringWriter();
+        Result result = new StreamResult(out);
+        transformer.transform(xmlSource, result);
+        return ResponseEntity.status(HttpStatus.OK).body(out.toString());
+    }
+
+    @GetMapping(path = "", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> findAllJson() {
+        return ResponseEntity.status(HttpStatus.OK).body(performanceService.findAll());
+    }
+
+    @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        PerformanceDto performanceDto = performanceService.findById(id);
+        if (performanceDto == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.ok(performanceDto);
+    }
+
+    @PostMapping(path = "", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> save(@RequestBody PerformanceDto performanceDto) {
+        performanceService.save(performanceDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        performanceService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PerformanceDto performanceDto) {
+        performanceDto.setId(id);
+        performanceService.save(performanceDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

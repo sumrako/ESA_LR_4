@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket update</title>
+</head>
+<body>
+<h2 style="color: darkblue; font-family: Georgia,serif">Update ticket</h2>
+<form id="timetable-form" th:method="post" th:object="${changeTicket}" th:action="@{/ticket/update/timetable}"></form>
+<input id="btnTimetable" hidden th:type="submit" form="timetable-form"/>
+
+<form style="margin-top: 20px; line-height: 30px" th:method="put" th:object="${ticket}" th:action="@{/ticket/{id}(id=${ticket.id})}">
+    <label style="color: darkblue; font-family: Candara,sans-serif">
+        Performance
+    <input style="font-family: Candara,sans-serif" th:field="${performance.name}" disabled>
+    </label>
+    <br/>
+    <label style="color: darkblue; font-family: Candara,sans-serif">
+        Seance
+        <select style="font-family: 'Times New Roman',sans-serif" th:field="${changeTicket.timetable.id}" required th:onchange="document.getElementById('btnTimetable').click()" form="timetable-form">
+            <option style="font-family: 'Times New Roman',sans-serif" th:each="m: ${fullTimetable}" th:value="${m.id}" th:text="${m.date}"></option>
+        </select>>
+    </label>
+    <input style="font-family: Candara,sans-serif" th:field="*{id}" hidden>
+    <input style="font-family: Candara,sans-serif" th:field="${changeTicket.id}" hidden form="timetable-form">
+    <input style="font-family: Candara,sans-serif" th:field="*{timetable.id}" hidden>
+    <input style="font-family: Candara,sans-serif" th:field="*{timetable.performance.id}" hidden>
+    <br/>
+    <label style="color: darkblue; font-family: Candara,sans-serif">
+        Seats
+        <select style="font-family: Candara,sans-serif" th:field="${changeTicket.seatDto}" th:onchange="document.getElementById('btnTimetable').click()" form="timetable-form" required>
+            <option style="font-family: Candara,sans-serif" th:each="m: ${seats}" th:value="|${m.seat};${m.row}|" th:text="|Row: ${m.row} Seat: ${m.seat}|">
+            </option>
+        </select>>
+    </label>
+    <input style="font-family: Candara,sans-serif" th:field="*{seatDto.row}" hidden>
+    <input style="font-family: Candara,sans-serif" th:field="*{seatDto.seat}" hidden>
+    <br/>
+    <label style="color: darkblue; font-family: Candara,sans-serif">
+        Any benefits
+        <input style="font-family: Candara,sans-serif" type="checkbox" th:field="*{benefits}">
+    </label>
+    <br/>
+    <button type="submit">Save</button>
+
+</form>
+</body>
+</html>

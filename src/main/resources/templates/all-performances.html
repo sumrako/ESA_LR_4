@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All performances</title>
+</head>
+<body>
+<h1 style="color: darkmagenta; font-family: Georgia,serif">Performances</h1>
+<div style="background: aquamarine; width: 400px; height: 200px; padding-left: 150px">
+    <h2 style="color: darkblue; font-family: Georgia,serif">Create new performance</h2>
+    <form style="margin-top: 20px; line-height: 30px" th:method="post" th:object="${performance}" th:action="@{/performance}">
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Name
+            <input style="font-family: Candara,sans-serif" th:field="*{name}" required>
+        </label>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Genre
+            <select style="font-family: Candara,sans-serif" th:field="*{genre}" required>
+                <option style="font-family: Candara,sans-serif" th:value="comedy" th:text="comedy"></option>
+                <option style="font-family: Candara,sans-serif" th:value="horror" th:text="horror"></option>
+                <option style="font-family: Candara,sans-serif" th:value="drama" th:text="drama"></option>
+            </select>>
+        </label>
+        <br/>
+        <label style="color: darkblue; font-family: Candara,sans-serif">
+            Country
+            <input style="font-family: Candara,sans-serif" th:field="*{country}">
+        </label>
+        <br/>
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+<table style="margin: 50px">
+    <thead>
+    <tr>
+        <td style="color: darkmagenta" width="300px">Name</td>
+        <td style="color: darkmagenta" width="300px">Genre</td>
+        <td style="color: darkmagenta" width="300px">Country</td>
+        <td></td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="performance: ${performances}">
+        <td bgcolor=#fffff0 th:utext="${performance.name}"></td>
+        <td bgcolor=#fffff0 th:text="${performance.genre}"></td>
+        <td bgcolor=#fffff0 th:text="${performance.country}"></td>
+        <td>
+            <form th:action="@{/performance/{id}(id=${performance.id})}" th:method="get">
+                <button type="submit"> update </button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/performance/{id}(id=${performance.id})}" th:method="delete">
+                <button type="submit"> delete </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
